@@ -91,6 +91,35 @@ pip install flask flask-socketio pika pandas streamlit python-socketio eventlet
 4. The processed results will appear automatically in the dashboard
 5. You can download the processed data using the "Download as CSV" button
 
+## Testing
+
+The project includes integration tests to ensure that all components work together correctly.
+
+### Running Tests
+
+To run the integration tests:
+
+```bash
+# From the project root directory
+python run_tests.py
+```
+
+This will discover and execute all tests defined in `test_integration.py` and report any failures.
+
+### Test Coverage
+
+The integration tests verify:
+- Master server functionality
+- Worker node processing
+- RabbitMQ message handling
+- End-to-end data flow
+- WebSocket communication
+- Error handling and recovery
+
+### Adding New Tests
+
+To add new tests, extend the existing test suite in `test_integration.py` or create additional test files following the same pattern.
+
 ## Project Structure
 
 ```
@@ -102,8 +131,12 @@ distributed_csv_processor/
 │   ├── csv_processor.py  # CSV processing logic
 │   ├── rabbitmq_handler.py  # RabbitMQ client for master
 │   └── socket_handler.py # SocketIO server implementation
-└── worker/
-    └── worker.py         # Worker node implementation
+├── worker/
+│   └── worker.py         # Worker node implementation
+├── test_integration.py   # Integration tests
+├── run_tests.py          # Test runner script
+├── requirements.txt
+└── README.md
 ```
 
 ## Design Decisions and Trade-offs
@@ -119,3 +152,4 @@ distributed_csv_processor/
 - **No data appearing after upload**: Ensure at least one worker is running and check worker logs for errors.
 - **Socket connection issues**: Verify all components are running on expected hosts/ports and accessible.
 - **RabbitMQ connection errors**: Confirm RabbitMQ server is running with `rabbitmqctl status`.
+- **Test failures**: Check that all services (RabbitMQ, master, workers) are running before executing tests.
