@@ -147,6 +147,21 @@ distributed_csv_processor/
 - **Real-time Updates**: Used SocketIO for push-based updates with fallback to polling when WebSockets are not available.
 - **Scalability**: The architecture allows adding more workers without reconfiguration of the master server.
 
+- ## Key Achievements
+
+### Robust Idempotent Processing
+
+This system implements comprehensive idempotent message processing and deduplication strategies - a critical challenge in distributed systems:
+
+- **Multi-level Message Deduplication**: Implemented at both master and worker levels to prevent duplicate processing even under network issues or service restarts
+- **Content-Based Task ID Generation**: Smart task ID creation combining content hashing with timestamps ensures identical content is identified while preserving processing history
+- **Memory-Optimized Tracking**: Self-limiting deduplication sets prevent memory leaks during long-running operations
+- **Persistent Messaging**: Leverages RabbitMQ's delivery modes and message IDs for reliable message handling
+- **Intelligent Error Recovery**: Implements negative acknowledgment with selective requeuing to handle transient failures without duplicating successful work
+
+These mechanisms ensure that even in cases of network partitions, node failures, or message redelivery, each unique CSV file will only be processed once, maintaining data consistency across the distributed system.
+
+
 ## Troubleshooting
 
 - **No data appearing after upload**: Ensure at least one worker is running and check worker logs for errors.
